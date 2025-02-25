@@ -1,0 +1,2 @@
+10:13:37.410 [main] INFO  demoqa.core.TestBase -- Test is started: [loginPositiveTest]
+10:13:41.476 [main] INFO  demoqa.core.TestBase -- Test is PASSED: [loginPositiveTest]

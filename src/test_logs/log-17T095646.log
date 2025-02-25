@@ -1,0 +1,3 @@
+09:56:47.102 [main] INFO  demoqa.core.TestBase -- Test is started: [loginPositiveTest]
+09:56:47.307 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager -- Using chromedriver 133.0.6943.98 (resolved driver for Chrome 133)
+09:56:47.337 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager -- Exporting webdriver.chrome.driver as C:\Users\PORTISHEAD\.cache\selenium\chromedriver\win64\133.0.6943.98\chromedriver.exe
