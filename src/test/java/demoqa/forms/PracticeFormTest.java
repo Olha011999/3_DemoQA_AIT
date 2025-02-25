@@ -42,7 +42,7 @@ public class PracticeFormTest extends TestBase {
                 .chooseDateAsString("04 May 1965")
                 .enterSubjects(new String[]{"Math", "English"})
                 .chooseHobbies(new String[]{"Sports", "Music"})
-                .uploadPicture("C:\\Users\\PORTISHEAD\\Downloads\\unnamed2.png")
+                .uploadPicture("C:\\Users\\admin\\IdeaProjects\\AIT_QA_Project\\QA_Lesson_25\\robot.png")
                 .enterCurrentAddress("Portishead, Bristol, UK")
                 .enterState("NCR")
                 .enterCity("Delhi")
