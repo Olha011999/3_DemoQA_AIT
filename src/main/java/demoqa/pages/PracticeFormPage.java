@@ -7,9 +7,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
-
+import java.util.Arrays;
+import java.util.List;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver, WebDriverWait wait) {
@@ -36,7 +38,24 @@ public class PracticeFormPage extends BasePage {
     }
 
     public PracticeFormPage selectGender(String gender) {
+        //* Проверка на `null`
+        if (gender == null) {
+            throw new IllegalArgumentException("⛔ Gender can`t be `null`");
+        }
+        //* Проверка на пустое поле ""
+        if (gender.isEmpty()) {
+            throw new IllegalArgumentException("⛔ Gender can`t be `empty`");
+        }
+        //* Проверка на пробелы или спецсимволы форматирования: " ", "%s"
+        if (gender.isBlank()) {
+            throw new IllegalArgumentException("⛔ Gender can`t be `blank`");
+        }
+        //* Список допустимых значений
+        List<String> validGenders = Arrays.asList("Male", "Female", "Other");
 
+        if (!validGenders.contains(gender)) {
+            throw new IllegalArgumentException("⛔ Invalid gender: [" + gender + "]. Allowed values: " + validGenders);
+        }
         try {
             String xpathGender = "//label[.='" + gender + "']";
             WebElement genderLocator = driver.findElement(By.xpath(xpathGender));
@@ -91,63 +110,63 @@ public class PracticeFormPage extends BasePage {
         WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath(String.format("//div[contains(@class,'day') and text()='%d']", dayInt))
         ));
-       dayElement.click();
+        dayElement.click();
 
         System.out.printf("✅ Дата выбрана: [%s %s %s]%n", day, month, year);
         return this;
     }
 
-@FindBy(id = "subjectsInput")
-WebElement subjectsInput;
 
-public PracticeFormPage enterSubjects(String[] subjects) {
+    @FindBy(id = "subjectsInput")
+    WebElement subjectsInput;
 
-    for (String subject : subjects) {
-//        type(subjectsInput, subject);
-//        subjectsInput.sendKeys(Keys.ENTER);
-//        System.out.printf("✅ Subject: [%s]%n", subject);
-//    }
-//    return this;
-        if (subject == null || subject.isEmpty()) continue; // Пропускаем null или пустые строки
-
-        wait.until(ExpectedConditions.elementToBeClickable(subjectsInput)).click(); // Ждем и кликаем
-        subjectsInput.sendKeys(subject);
-        subjectsInput.sendKeys(Keys.ENTER);
-        System.out.printf("✅ Subject: [%s]%n", subject);
+    public PracticeFormPage enterSubjects(String[] subjects) {
+        for (String subject : subjects) {
+            type(subjectsInput, subject);
+            subjectsInput.sendKeys(Keys.ENTER);
+            System.out.printf("✅ Subject: [%s]%n", subject);
+        }
+        return this;
     }
-    return this;
-}
 
-public PracticeFormPage chooseHobbies(String[] hobbies) {
-    for (String hobby : hobbies) {
-        By hobbyLocator = By.xpath("//label[.='" + hobby + "']");
-        WebElement element = driver.findElement(hobbyLocator);
-        click(element);
-        System.out.printf("✅ Hobby: [%s]%n", hobby);
+    public PracticeFormPage chooseHobbies(String[] hobbies) {
+        for (String hobby : hobbies) {
+            By hobbyLocator = By.xpath("//label[.='" + hobby + "']");
+            WebElement element = driver.findElement(hobbyLocator);
+            click(element);
+            System.out.printf("✅ Hobby: [%s]%n", hobby);
+        }
+        return this;
     }
-    return this;
-}
 
-@FindBy(id = "uploadPicture")
-WebElement uploadPicture;
+    @FindBy(id = "uploadPicture")
+    WebElement uploadPicture;
 
 //    public PracticeFormPage uploadPicture(String imgPath) {
 //        uploadPicture.sendKeys(imgPath);
 //        System.out.printf("✅ Image: [%s]%n", imgPath);
+//
 //        return this;
 //    }
-public PracticeFormPage uploadPicture(String imgPath) {
-    if (imgPath == null || imgPath.isEmpty()) {
-        throw new IllegalArgumentException("⛔ File path can't be null or empty");
+
+    public PracticeFormPage uploadPicture(String imgPath) {
+        if (imgPath == null || imgPath.isEmpty()) {
+            throw new IllegalArgumentException("⛔ Путь к файлу не может быть null или пустым");
+        }
+
+        uploadPicture.sendKeys(imgPath);
+
+        String expectedFileName = imgPath.substring(imgPath.lastIndexOf(File.separator) + 1);
+        String uploadedFileName = uploadPicture.getAttribute("value");
+
+        if (uploadedFileName == null || !uploadedFileName.contains(expectedFileName)) {
+            throw new RuntimeException("❌ Несоответствие имени загруженного файла: ожидалось [" + expectedFileName + "] но было [" + uploadedFileName + "]");
+        }
+
+        System.out.printf("✅ Изображение успешно загружено: [%s]%n", expectedFileName);
+        return this;
     }
-    uploadPicture.sendKeys(imgPath);
-    String uploadedFileName = uploadPicture.getAttribute("value");
-    if (!uploadedFileName.contains(imgPath.substring(imgPath.lastIndexOf("\\") + 1))) {
-        throw new RuntimeException("❌ Uploaded file name mismatch: expected [" + imgPath + "] but got [" + uploadedFileName + "]");
-    }
-    System.out.printf("✅ Image uploaded successfully: [%s]%n", imgPath);
-    return this;
-}
+
 
     @FindBy(id = "currentAddress")
     WebElement currentAddress;
@@ -157,6 +176,7 @@ public PracticeFormPage uploadPicture(String imgPath) {
         System.out.printf("✅ Address: [%s]%n", address);
         return this;
     }
+
     @FindBy(id = "state")
     WebElement stateContainer;
 

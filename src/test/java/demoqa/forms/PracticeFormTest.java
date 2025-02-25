@@ -20,9 +20,9 @@ public class PracticeFormTest extends TestBase {
         new PracticeFormPage(app.driver, app.wait)
                 .enterPersonalData("Beth", "Gibbons", "portishead@gmail.com", "1234567890")
                 .selectGender("Female")
-                .chooseDateAsString("01 February 1965")
-                .chooseDate("01", "February", "1965")
-                .enterSubjects(new String[]{null, "English"})
+                .chooseDateAsString("04 May 1965")
+                //.chooseDate("04", "May", "1965")
+                .enterSubjects(new String[]{"Math", "English"})
                 .chooseHobbies(new String[]{"Sports", "Music"})
                 .uploadPicture("C:\\Users\\admin\\IdeaProjects\\AIT_QA_Project\\QA_Lesson_25\\robot.png")
                 .enterCurrentAddress("Portishead, Bristol, UK")
@@ -37,7 +37,7 @@ public class PracticeFormTest extends TestBase {
     @Parameters({"firstName","lastName","email","phone"})
     public void practiceFormParameterPositiveTest(String firstName, String lastName, String email, String phone) {
         new PracticeFormPage(app.driver, app.wait)
-                .enterPersonalData(firstName, lastName, System.currentTimeMillis()+email, phone)
+                .enterPersonalData(firstName, lastName, System.currentTimeMillis() + email, phone)
                 .selectGender("Female")
                 .chooseDateAsString("04 May 1965")
                 .enterSubjects(new String[]{"Math", "English"})
@@ -49,6 +49,5 @@ public class PracticeFormTest extends TestBase {
                 .submitForm()
                 .verifySuccessRegistration("Thanks for submitting the form")
         ;
-    }
-
+    }// тест работает, только если его запускать напрямую нажав правой кнопкой мыши на data.xml
 }
